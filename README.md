@@ -1,3 +1,3 @@
-# omm-web
+# omm-front
 
-Web of Oh My Mailbox
+Front of Oh My Mailbox
