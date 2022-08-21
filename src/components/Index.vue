@@ -9,10 +9,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['msg']
-}
+<script setup>
+defineProps(['msg'])
 </script>
 
 <style scoped>

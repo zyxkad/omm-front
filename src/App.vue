@@ -1,16 +1,16 @@
 <template>
-  <div class="body" v-bind:style="{'height': appHeight + 'px'}">
-    <div class="side-nav" v-bind:[navExpandedAttr]="''">
-      <div class="logo" v-on:click="triggerNavExpand">
+  <div class="body" :style="{'height': appHeight + 'px'}">
+    <div class="side-nav" :class="navExpandedAni ?'-side-nav-expand' :'-side-nav-expand-reverse'" :[navExpandedAttr]="''">
+      <div class="logo" v-on:click="toggleNavExpand">
         <img alt="Vue logo" src="@/assets/logo.svg" width="100" height="100" />
       </div>
       <nav>
-        <RouterLink to="/">
-          <span class="nav-text">Index</span>
-        </RouterLink>
-        <RouterLink to="/about">
-          <span class="nav-text">About</span>
-        </RouterLink>
+        <RouterLink to="/">Index</RouterLink>
+        <div v-for="item in accounts">
+          <span class='nav-account'>{{item.email}}</span>
+          <RouterLink :to="`/${item.email}/`">All</RouterLink>
+          <RouterLink v-for="box in item.boxes" :to="`/${item.email}/${box}`">{{box}}</RouterLink>
+        </div>
       </nav>
     </div>
     <div class="content">
@@ -19,36 +19,33 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-export default {
-  data(){
-    return {
-      navExpanded: true,
-    }
-  },
-  computed: {
-    appHeight: {
-      get(){
-        return window.innerHeight;
-      }
-    },
-    navExpandedAttr: {
-      get(){
-        return this.navExpanded ?'expanded-nav' :null;
-      }
-    }
-  },
-  methods: {
-    triggerNavExpand(){
-      this.navExpanded = !this.navExpanded;
-    }
-  },
-  components: {
-    RouterLink,
-    RouterView
+
+const navExpanded = ref(true)
+const navExpandedAni = ref(true)
+
+const accounts = ref([
+  {'email': 'user@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash']},
+])
+
+const appHeight = computed(()=>window.innerHeight)
+const navExpandedAttr = computed(()=>navExpanded.value ?'expanded-nav' :null)
+
+var toggleNavExpanding = false;
+function toggleNavExpand(){
+  if(toggleNavExpanding){
+    return;
   }
+  toggleNavExpanding = true;
+  navExpandedAni.value = !navExpandedAni.value;
+  setTimeout(()=>{
+    navExpanded.value = navExpandedAni.value;
+    toggleNavExpanding = false;
+  }, 350);
 }
+
 </script>
 
 <style scoped>
@@ -58,27 +55,54 @@ export default {
 }
 
 .side-nav {
-  width: 3rem;
+  width: 3.8rem;
   padding: 0.5rem 0;
   margin-right: 1rem;
-  box-shadow: 1px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  overflow: hidden;
+  border-right: 1px solid var(--color-border);
 }
 
 .side-nav[expanded-nav] {
-  /*width: fit-content;*/
-  width: 12rem;
-  box-shadow: #000 0px 0px 20px 0px;
+  width: 15rem;
 }
 
-.logo {
+.-side-nav-expand {
+  animation: -side-nav-expand 0.5s ease-out;
+}
+
+.-side-nav-expand-reverse {
+  animation: -side-nav-expand-reverse 0.4s;
+}
+
+@keyframes -side-nav-expand {
+  from {
+    width: 3.8rem;
+  }
+  to {
+    width: 15rem;
+  }
+}
+
+@keyframes -side-nav-expand-reverse {
+  from {
+    width: 15rem;
+  }
+  to {
+    width: 3.8rem;
+  }
+}
+
+
+.side-nav .logo {
   box-sizing: content-box;
   display: block;
   width: 2rem;
   height: 2rem;
-  padding: 0.5rem 0.7rem 0.5rem 0.8rem;
+  padding: 0.5rem 0.7rem 0.5rem calc(100% - 3rem);
+  margin-right: 0.2rem;
   border: 1px solid var(--color-border);
   border-left: none;
   border-radius: 0 1.5rem 1.5rem 0;
@@ -97,30 +121,36 @@ export default {
   flex-direction: column;
 }
 
+.nav-account {
+  display: block;
+  height: 1.7rem;
+  padding: 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 300;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
 .side-nav nav a {
   display: block;
   height: 1.7rem;
   padding: 0 0.5rem;
-  margin-left: 0.75rem;
+  margin-left: 0.5rem;
   border-left: 1px solid var(--color-border);
-}
-
-.side-nav nav .nav-text {
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.side-nav:not([expanded-nav]) nav .nav-text {
-  display: none;
+  display: block;
+  font-size: 1rem;
+  font-weight: 450;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: 0.4s;
 }
 
 .side-nav nav a.router-link-exact-active {
   padding-left: 0.7rem;
-}
-
-.side-nav nav a.router-link-exact-active .nav-text {
-  color: var(--color-text);
-  font-weight: 900;
+  color: hsla(160, 100%, 37%, 1);
+  font-weight: 600;
 }
 
 .side-nav nav a.router-link-exact-active:hover {
