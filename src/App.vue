@@ -23,8 +23,10 @@
 import { ref, computed } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 
-const navExpanded = ref(true)
-const navExpandedAni = ref(true)
+const isMobile = window.innerHeight > window.innerWidth
+
+const navExpanded = ref(!isMobile)
+const navExpandedAni = ref(!isMobile)
 
 const accounts = ref([
   {'email': 'user@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash']},
