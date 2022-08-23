@@ -63,7 +63,7 @@ function toggleNavExpand(){
 
 .side-nav {
   width: 3.8rem;
-  padding: 0.5rem 0;
+  padding-top: 0.5rem;
   margin-right: 1rem;
   display: flex;
   flex-direction: column;

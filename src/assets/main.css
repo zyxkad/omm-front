@@ -1,9 +1,11 @@
 @import "./base.css";
 
 #app {
-  max-width: 1280px;
-
   font-weight: normal;
+}
+
+#footer {
+  display: none;
 }
 
 a, .green {
