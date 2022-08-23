@@ -29,7 +29,12 @@ const navExpanded = ref(!isMobile)
 const navExpandedAni = ref(!isMobile)
 
 const accounts = ref([
-  {'email': 'user@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash']},
+  {'email': 'user1@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash']},
+  {'email': 'user2@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash']},
+  {'email': 'user3@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash', 'Tag1']},
+  {'email': 'user4@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash', 'Tag1', 'Tag2']},
+  {'email': 'user5@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash', 'Tag3']},
+  {'email': 'user6@example.com', 'boxes': ['Inbox', 'Sent', 'Junk', 'Trash', 'Tag4']},
 ])
 
 const appHeight = computed(()=>window.innerHeight)
@@ -45,7 +50,7 @@ function toggleNavExpand(){
   setTimeout(()=>{
     navExpanded.value = navExpandedAni.value;
     toggleNavExpanding = false;
-  }, 350);
+  }, 400);
 }
 
 </script>
@@ -80,21 +85,13 @@ function toggleNavExpand(){
 }
 
 @keyframes -side-nav-expand {
-  from {
-    width: 3.8rem;
-  }
-  to {
-    width: 15rem;
-  }
+  from { width: 3.8rem; }
+  to { width: 15rem; }
 }
 
 @keyframes -side-nav-expand-reverse {
-  from {
-    width: 15rem;
-  }
-  to {
-    width: 3.8rem;
-  }
+  from { width: 15rem; }
+  to { width: 3.8rem; }
 }
 
 
@@ -121,6 +118,7 @@ function toggleNavExpand(){
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .nav-account {
